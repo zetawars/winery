@@ -1,0 +1,19 @@
+﻿
+
+
+
+<!-- set login/logout status based on Session("loggedin") = True -->
+
+
+	<section>
+		<ul class="actions vertical">
+            <% If Session("loggedin") = True then %>
+                
+			    <li><a href="login.asp?Logout=1" class="button big fit">Log Out</a></li>
+            <% else %>
+                <li><a href="login.asp" class=" disabled button big fit">Log In</a></li>
+            <% end if %>
+		</ul>
+
+        <center>Welcome, <% = session("username") %></center>
+	</section>

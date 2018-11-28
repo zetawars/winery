@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>User_Name</title>
+</head>
+
+<body>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<div align="center"><!--#include file="winery_header.asp"-->
+<form BOTID="0" METHOD="POST" action="login.asp">
+	<input type="hidden" name="fpdbr_0_PagingMove" value="  |&lt;  ">
+	<table BORDER="0" align=center width="314">
+		<tr>
+			<td width="108">
+		&nbsp;</td>
+			<td>
+			&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<p align="center"><font face="Arial" color="#FF0000"><b>Login Failed. Click to try again</b></font></td>
+		</tr>
+		<tr>
+			<td width="108">&nbsp;</td>
+			<td>
+			&nbsp;</td>
+		</tr>
+	</table>
+	<div align="center">
+	
+	<input TYPE="submit" value="Login"><!--webbot bot="SaveAsASP" clientside suggestedext="asp" preview=" " startspan --><!--webbot bot="SaveAsASP" endspan --></p>
+	<p>&nbsp;</p>
+</form>
+<table width="300" border="0">
+
+	<tbody>
+
+	<!--#include file="../_fpclass/fpdblib.inc"-->
+<% if 0 then %>
+<SCRIPT Language="javascript">
+document.write("<div style='background: yellow; color: black;'>The Database Results component on this page is unable to display database content. The page must have a filename ending in '.asp', and the web must be hosted on a server that supports Active Server Pages.</div>");
+</SCRIPT>
+<% end if %>
+<%
+fp_sQry="SELECT * FROM User_Accounts"
+fp_sDefault="User_Name=&Password="
+fp_sNoRecords="<tr><td colspan=14 align=""center"" border=""0"" width=10><a href=login.asp><font face=arial size=3>Login Failed. Click here to try again.</font></a></td></tr>"
+fp_sDataConn="wine_list"
+fp_iMaxRecords=256
+fp_iCommandType=1
+fp_iPageSize=0
+fp_fTableFormat=True
+fp_fMenuFormat=False
+fp_sMenuChoice=""
+fp_sMenuValue=""
+fp_sColTypes="&ID=3&User_ID=202&User_Name=202&Password=202&Login=202&F_Name=202&L_Name=202&E-Mail=202&Address1=202&Address2=202&City=202&State=202&Zip=202&Phone=202&"
+fp_iDisplayCols=14
+fp_fCustomQuery=False
+BOTID=0
+fp_iRegion=BOTID
+%>
+<!--#include file="../_fpclass/fpdbrgn1.inc"-->
+<!--webbot bot="DatabaseRegionStart" endspan i-checksum="39440" --><tr>
+		</tr><font color="#ffffff">
+		<%
+		UN=(Request("User_Name"))
+		PW=(Request("Password"))
+		UP = UN&PW
+		'response.write UP
+		
+		User = FP_FieldVal(fp_rs,"User_Name") &FP_FieldVal(fp_rs,"Password")
+		UID=FP_FieldVal(fp_rs,"User_ID") 
+		'response.write User		
+		
+		reqpage = "&requester=" & Server.HtmlEncode(Request("requester"))
+		reqpage2= UID &  reqpage
+		
+		'for each FP_FieldVal(fp_rs,"User_ID") in User_Accounts
+			if UP = User then
+				response.redirect "index.asp" & "?" & "k=" & reqpage2 
+				'Exit For
+			end if
+		'next	
+		'response.redirect "login.asp"	
+		%>
+		</font>
+		
+		<!--webbot bot="DatabaseRegionEnd" b-tableformat="TRUE" b-menuformat="FALSE" u-dbrgn2="../_fpclass/fpdbrgn2.inc" i-groupsize="0" clientside tag="TBODY" preview="&lt;tr&gt;&lt;td colspan=64 bgcolor=&quot;#FFFF00&quot; width=&quot;100%&quot;&gt;&lt;font color=&quot;#000000&quot;&gt;This is the end of a Database Results region.&lt;/font&gt;&lt;/td&gt;&lt;/tr&gt;" startspan --><!--#include file="../_fpclass/fpdbrgn2.inc"-->
+<!--webbot bot="DatabaseRegionEnd" endspan --></tbody>
+</table>
+<% response.redirect "login.asp" %>
+</body>
+
+</html>

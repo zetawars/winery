@@ -1,0 +1,14 @@
+﻿							<ul>
+								<li><a href="vineyard_list.asp">Wineries</a></li>
+								<li><a href="wine_list.asp">Wines</a></li>
+                                <li><a href="dining_list.asp">Dining</a></li>
+								<li><a href="events_list.asp">Events</a></li>
+                                <li><a href="visit_schedule.asp">Visit</a></li>
+                                
+                                <% If Session("loggedin") = True then %>
+                                    <li style="margin-left: 25%"><a href="user_profile.asp">Welcome, <% = session("username") %></a>  </li>
+                                <% Else %>
+                                    
+                                <% End If %>
+							</ul>
+                            
