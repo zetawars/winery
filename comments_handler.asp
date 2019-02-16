@@ -6,6 +6,7 @@ Dim Recordset
 Dim SQL, insert
 Dim rsRating
 Dim comment
+Dim BottleCount
 
 if Request.Form("score") <> "" And Request.Form("wine") <> "" And Request.Form("member") <> "" And  Request.Form("action") = "insertScore" Then
         
@@ -69,14 +70,22 @@ end if
 
 if Request.Form("liked") <> "" And Request.Form("wine") <> "" And Request.Form("member") <> "" And  Request.Form("action") = "insertLike" Then
         
+		 
+		 Response.Write("Reached")
+		 BottleCount = Request.Form("BottleCount")
+		
         'Dim rating = Request.Form("rate")
         'Dim member = Request.Form("member")
         'Dim wine = Request.Form("wine")
         'declare the SQL statement that will query the database
         SQL = "SELECT * FROM Members_Notes WHERE Member='" & Request.Form("member") & "' AND Wine='" & Request.Form("wine") & "'"
-        insert = "INSERT INTO Members_Notes (Member, Wine, User_Like) VALUES('" & Request.Form("member") & "', '" & Request.Form("wine") & "', '" & Request.Form("liked") & "')"
+		If Trim(BottleCount) <> "" Then
+			insert = "INSERT INTO Members_Notes (Member, Wine, User_Like, User_Like_Value) VALUES('" & Request.Form("member") & "', '" & Request.Form("wine") & "', '" & Request.Form("liked") & "', '" & Request.Form("BottleCount") & "')"    
+		Else
+			insert = "INSERT INTO Members_Notes (Member, Wine, User_Like) VALUES('" & Request.Form("member") & "', '" & Request.Form("wine") & "', '" & Request.Form("liked") & "')"
+		End If
         lastID = "SELECT last_insert_id() as last_id"
-
+ Response.Write(BottleCount)
         'Response.write SQL
         'Response.write insert
         
@@ -90,12 +99,13 @@ if Request.Form("liked") <> "" And Request.Form("wine") <> "" And Request.Form("
         
         'Open the connection to the database
         Connection.Open ConnString
-        
+       
         'Open the Recordset object executing the SQL statement and return records 
         rsRating.Open SQL,Connection
         
         If rsRating.EOF Then 
-            Connection.execute(insert)
+        Response.Write(insert)
+			Connection.execute(insert)
             rsLastID.Open lastID, Connection,adLockPessimistic
             Response.Write rsLastID("last_id")
             Connection.Close
@@ -103,19 +113,25 @@ if Request.Form("liked") <> "" And Request.Form("wine") <> "" And Request.Form("
             Response.Write rsRating("user_like") 
             Connection.Close     
         End If
-           
+     
+		
                     
 end if
 
 if Request.Form("id") <> "" And  Request.Form("action") = "updateLike" Then
         
+		'Response.Write("Update Called")
+		
         'declare the SQL statement that will query the database
-        If Request.Form("id") = "4" Then
-           update = "UPDATE Members_Notes SET User_Like='" & Request.Form("liked") & "', User_Like_Value = '" & Request.Form("User_Like_Value") &  "' WHERE ID=" & Request.Form("id")
-       
-        End If
-        update = "UPDATE Members_Notes SET User_Like='" & Request.Form("liked") & "' WHERE ID=" & Request.Form("id")
-        'Response.Write update
+		
+		 BottleCount = Request.Form("BottleCount")
+		 'Response.Write(BottleCount)
+		If Trim(BottleCount) <> "" Then	
+			update = "UPDATE Members_Notes SET User_Like='" & Request.Form("liked") & "', User_Like_Value = '" & BottleCount &  "' WHERE ID=" & Request.Form("id")
+        Else
+			update = "UPDATE Members_Notes SET User_Like='" & Request.Form("liked") & "' WHERE ID=" & Request.Form("id")
+        End if
+		Response.Write update
         'define the connection string, specify database driver
         ConnString = "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=50.62.209.75; DATABASE=TemeculaDB; UID=TemeculaDB; PASSWORD=Wine!Admin2016; OPTION=3"
         
@@ -127,7 +143,7 @@ if Request.Form("id") <> "" And  Request.Form("action") = "updateLike" Then
         
         Connection.execute(update)
         Connection.Close
-        Response.Write("1")
+        'Response.Write("1")
            
                     
 end if

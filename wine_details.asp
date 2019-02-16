@@ -182,13 +182,26 @@ input[type="checkbox"] + label, input[type="radio"] + label
 </style>
 
 <script>
-function myFunction() {
-    $("#myPopup").addClass("show");
-    // var popup = document.getElementById("myPopup");
-    // popup.classList.show();
-}
+
 
     $(document).ready(function () {
+
+function ClosePopup(){
+	$("#myPopup").removeClass("show");
+	$("#myPopup").hide();
+}
+
+$("#BoughtPopup").on('click', function(event){
+  if (event.target == this) {
+     PopupOpen();
+  }
+});
+
+
+function PopupOpen() {
+    $("#myPopup").addClass("show");
+	$("#myPopup").show();
+}
 
     
        if($("input[name='starsVal']").val() != ""){
@@ -255,18 +268,26 @@ function myFunction() {
         
         $(".like-btn").click(function () {
 
+								ClosePopup();	
                                if($("input[name='noteID']").val() == "" && $("input[name='likesVal']").val() == ""){
                                     var liked = $(this).data("like");
                                     var member = $("input[name='memberID']").val();
                                     var wine = $("input[name='wineID']").val();
                                     var value = $("#like"+liked).text();
                                     $("input[name='likesVal']").val(liked);
-                                          
+									var BottleCount = 0;
+                                    if(liked == 4)
+									{
+										BottleCount = $("#BottleCount").val();
+										console.log("Inside if Bottle Count = " + BottleCount);
+									}
+									
                                     $.post("comments_handler.asp",
                                     {
                                                 liked:liked,
                                                 member: member,
                                                 wine: wine,
+												BottleCount : BottleCount,
                                                 action: "insertLike"},
                                      function(d){
                                         if(d>0)
@@ -285,15 +306,24 @@ function myFunction() {
                                     var wine = $("input[name='wineID']").val();
                                     var id = $("input[name='noteID']").val();
                                     $("input[name='likesVal']").val(liked);
-                                    var value = $("#like"+liked).text();      
+                                    var value = $("#like"+liked).text();  
+									var BottleCount = 0;
+									if(liked == 4)
+									{
+										BottleCount = $("#BottleCount").val();
+										console.log("Inside if Bottle Count = " + BottleCount);
+									}
+									
                                     $.post("comments_handler.asp",
                                     {
                                                 id: id,
                                                 liked:liked,
                                                 member: member,
                                                 wine: wine,
+												BottleCount : BottleCount,
                                                 action: "updateLike"},
                                      function(d){
+									 console.log(d);
                                         if(d>0)
                                         {
                                             $("#likeShowSpan").text(value);
@@ -821,9 +851,9 @@ function myFunction() {
                                 <span data-like="1" id="like1" class="button small like-btn">I Drank </span> 
                                 <span data-like="2" id="like2" class="button small like-btn"> I Liked </span> 
                                 <span data-like="3" id="like3" class="button small like-btn"> I Want </span> 
-                                <span class="button small popup" onclick="myFunction()">I Bought
+                                <span class="button small popup" id="BoughtPopup" >I Bought
                                         <span class="popuptext" id="myPopup">
-                                            <input type="text" id="BottleCount" placeholder="How much you bought ?" />
+                                            <input type="text" id="BottleCount" placeholder="How much ?" />
                                             <button data-like="4" data-field="#BottleCount" class="btn btn-default like-btn"  type="button">Save</button>
                                         </span>
                                 </span> 
@@ -1038,14 +1068,7 @@ function myFunction() {
 	</div>
 
 
-    <script>
-      $("#like4").click(function(e){
-          e.preventDefault();
-
-
-      })
-
-    </script>
+    
 
 	</body>
 </html>

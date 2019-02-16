@@ -31,6 +31,32 @@
     	<script type="text/javascript" src="html5/imperfect/assets/js/util.js"></script>
     	<!--[if lte IE 8]><script src="html5/imperfect/assets/js/ie/respond.min.js"></script><![endif]-->
     	<script type="text/javascript" src="html5/imperfect/assets/js/main.js"></script>
+
+
+<script>
+    
+function readURL(input) {
+
+  var id = $(input).data("src");
+
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#' + id).attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+$(".image-file").change(function() {
+  readURL(this);
+});
+
+</script>
+
+
         <link rel="icon" href="images/icon_wine_glass_0.jpg" type="image/x-icon">
 
 		<style>
@@ -135,150 +161,42 @@
 
 <!-- Main -->
 	<div id="main">
-		<% If Session("Role") = "Admin" Then %>	
-			<a href="#/" class="button" id="AddNewBtn">Add New Event</a>
-			<br />
-		<% end if %>
-		
 
-        <% 
-
-
-        'declare the variables 
-        Dim Connection
-        Dim ConnectionString
-        Dim Recordset
-        Dim SQL, SQL1
-        Dim rsEvents, rsFav
-
-
-        'declare the SQL statement that will query the database
-         SQL = "SELECT * FROM Events ORDER BY S_Date DESC, Name ASC"
-        SQL1 = "SELECT * FROM Favorites WHERE Member_ID='"&M&"' ORDER BY Event_ID DESC"
-       'Response.write SQL1
-        'define the connection string, specify database driver
-        ConnString = "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=50.62.209.75; DATABASE=TemeculaDB; UID=TemeculaDB; PASSWORD=Wine!Admin2016; OPTION=3"
-
-        'create an instance of the ADO connection and Recordset objects
-        Set Connection = Server.CreateObject("ADODB.Connection")
-        Set Connection1 = Server.CreateObject("ADODB.Connection")
-
-        Set rsEvents = Server.CreateObject("ADODB.RecordSet")
-        Set rsFav = Server.CreateObject("ADODB.RecordSet")
-
-        'Open the connection to the database
-        Connection.Open ConnString
-        Connection1.Open ConnString
-
-        'Open the Recordset object executing the SQL statement and return records 
-        rsEvents.Open SQL,Connection
-        rsFav.Open SQL1,Connection1
-
-        'first of all determine whether there are any records 
-        If rsEvents.EOF  Then 
-        Response.Write("No records returned.") 
-        Else
-        'if there are records then loop through the fields 
-        Do While NOT rsEvents.Eof   
-            'Do While NOT rsFav.Eof
-        %>
-
-	    <%
-	    If not rsFav.EOF Then
-            F_fav=rsFav("Member_ID")
-	        'Response.write F_fav
-
-            F_FavID = rsFav("Event_ID")
-            'Response.write F_abc
-        end if
-
-	    E_Hours=len(rsEvents("E_Time"))
-	    'Response.write T_Hours
-	
-	    E_Mail=len(rsEvents("EMail"))
-	    'Response.write T_Hours
-
-        E_Desc = len(rsEvents("Description")) 
-        
-        Location = rsEvents("Location")
-
-
-        E_Fave = (rsEvents("ID"))
-
-	    %>
-
-		
         <article class="post">
             <footer>
                 <div class="post">
-                    <a href='event_details.asp?E=<%=rsEvents("ID")%>' ><img alt="<%=rsEvents("Name")%>" src='<%=rsEvents("Event_Image")%>'  /></a>
+                    <img alt="" src='#/' id="EventImage"  />
+                    <input type="file" value="Select Image" class="image-file" data-src="EventImage" />
                 </div>
                 <div class="title2" style="margin-left: 20px">
 
-                    <h3>
-                        <% if F_FavID = E_Fave then %>
-                    
-                            <span data-fav="1" float:"left" id="<%=E_EventID %>" data-userid="<%=M %>">
-                            <img  class="favico" alt="Select as Favorite" src='images/fav_heart_true.png' width="13" height="13" border="0" style="float: right" />
-                             </span>      
-                            <%  If not rsFav.EOF Then
-                                rsFav.MoveNext
-                                end if 
-                               
-                            %> 
-                            <% else  %>
-                            <span data-fav="0" float:"left" id="<%=rsEvents("ID") %>" data-userid="<%=M %>">
-                            <img class="favico" alt="Favorite" src='images/fav_heart_vote.png' width="13" height="13" border="0" style="float: right"  />
-                            </span>    
-                    <% end if %>
-                        <a class="published" href='event_details.asp?E=<%=rsEvents("ID")%>'><%=rsEvents("Name")%></a>
-                       
-                        
-                    </h3>
-                    <b>Location:   </b><a target="_blank" href="<% =Location %>"><span class="published"><% =rsEvents("Address") %></span></a>
+                        <label>Event Name</label>
+                        <input type="text" class="form-control" name="EventName" />
 
+                         <label>Location</label>
+                        <input type="text" class="form-control" name="Location" />
 
-                                
-                    <br />
-                    
-                    <span class="published"><b>Phone: </b><a href="tel:<%=rsEvents("Phone")%>"><%=rsEvents("Phone")%></a></span>
-                                                
-                    
-                    <br /><span class="published"><b>Dates:</b>   <% =rsEvents("E_Day")%>,  <%=rsEvents("E_Date")%> </span>     
-                                                       
-                    <% if E_Hours > 6 then %>     
-                        <br /><span class="published"><b>Hours:</b> <%=rsEvents("E_Time")%> </span>
-	                                                   
-                    <% end if %>
+                         <label>Phone</label>
+                        <input type="text" class="form-control" name="Phone" />
 
+                         <label>Dates</label>
+                        <input type="text" class="form-control" name="Date" />
 
+                        <label>Hours</label>
+                        <input type="text" class="form-control" name="Hours" />
 
-
-
-                    <br /><span class="published"><b>Tickets:</b> <%=rsEvents("Cost")%></span>
-
-                                                
+                         <label>tickets</label>
+                        <input type="text" class="form-control" name="Tickets" />                        
                 </div>
+
+                  <div>
+                      <button class="btn btn-primary" type="button" >Add</button>
+
+                  </div>  
+
             </footer>
         </article>
-                        
-        <%
-        rsEvents.MoveNext     
-        Loop
-        End If
-        %>
 
-                                
-        <%
-
-        'close the connection and Recordset objects freeing up resources
-        rsEvents.Close
-        Set rsEvents=nothing
-        Connection.Close
-        Set Connection=nothing
-
-        %>
-						
 
 		</div>
 

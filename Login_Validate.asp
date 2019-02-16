@@ -56,6 +56,7 @@ If rsUser.EOF  Then
                Session("loggedin") = True
                Session("userid") = rsUser("User_ID")
                Session("locale") = rsUser("Locale")
+			   Session("Role") = rsUser("Role")
                Session("ID") = rsUser("ID")
                Session("username") = rsUser("F_Name")
                'redirect to members area
@@ -65,6 +66,7 @@ If rsUser.EOF  Then
 				Response.Cookies("user")("userid") = rsUser("User_ID")
 				Response.Cookies("user")("ID") = rsUser("ID")
 				Response.Cookies("user")("username") = rsUser("F_Name")
+				Response.Cookies("user")("Role") = rsUser("Role")
 				
     'testing for Boisset login
                 If Session("locale") = "Boisset" then 
